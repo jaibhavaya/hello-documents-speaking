@@ -26,7 +26,7 @@ Turns your documents into an entity with feelings, emotions, and DATA, so that y
 1. **Install dependencies:**
    ```bash
    git clone <repo_url>
-   cd goose
+   cd hello-documents-speaking
    mix deps.get
    ```
 
@@ -92,7 +92,7 @@ This service works alongside `boost-api`:
 ### Code Organization
 
 ```
-lib/goose/
+lib/hello_documents_speaking/
 ├── clients/           # External API clients (OpenAI)
 ├── models/            # Database schemas
 ├── services/          # Business logic (DocumentAI, PDF extraction)
