@@ -1,6 +1,6 @@
 # Debug Guide
 
-This guide helps developers debug issues in the Goose service effectively.
+This guide helps developers debug issues in the Hello Documents Speaking service effectively.
 
 ## Local Development Setup
 
@@ -21,20 +21,20 @@ iex -S mix
 :application.which_applications()
 
 # Inspect a specific module
-i(Goose.WebSockets.DocumentChatWebSocket)
+i(HelloDocumentsSpeaking.WebSockets.DocumentChatWebSocket)
 
 # Check process status
 Process.list() |> length()
 
 # Test database connection
-Goose.Repo.query("SELECT 1")
+HelloDocumentsSpeaking.Repo.query("SELECT 1")
 
 # Test document loading
-document = Goose.Repo.get(Goose.Models.Document, 1)
-Goose.Models.Document.read_file(document)
+document = HelloDocumentsSpeaking.Repo.get(HelloDocumentsSpeaking.Models.Document, 1)
+HelloDocumentsSpeaking.Models.Document.read_file(document)
 
 # Test OpenAI client
-Goose.Clients.OpenAIClient.responses("You are helpful", [%{role: "user", content: "Hello"}])
+HelloDocumentsSpeaking.Clients.OpenAIClient.responses("You are helpful", [%{role: "user", content: "Hello"}])
 ```
 
 ## Common Debugging Scenarios
@@ -108,7 +108,7 @@ DATABASE_PORT=5432
 3. **Test connection**:
 ```bash
 # In iex -S mix
-Goose.Repo.query("SELECT version()")
+HelloDocumentsSpeaking.Repo.query("SELECT version()")
 ```
 
 #### Problem: Records not found
@@ -117,13 +117,13 @@ Goose.Repo.query("SELECT version()")
 
 ```elixir
 # Check if user exists
-user = Goose.Repo.get(Goose.Models.User, 1)
+user = HelloDocumentsSpeaking.Repo.get(HelloDocumentsSpeaking.Models.User, 1)
 
 # Check if documents exist  
-docs = Goose.Repo.all(Goose.Models.Document)
+docs = HelloDocumentsSpeaking.Repo.all(HelloDocumentsSpeaking.Models.Document)
 
 # Check firm association
-user = Goose.Repo.preload(user, :current_firm)
+user = HelloDocumentsSpeaking.Repo.preload(user, :current_firm)
 ```
 
 ### AI/OpenAI Issues
@@ -136,7 +136,7 @@ user = Goose.Repo.preload(user, :current_firm)
 ```elixir
 # In iex -S mix
 System.get_env("OPENAI_API_KEY")
-Application.get_env(:goose, :openai_api_key)
+Application.get_env(:hello-documents-speaking, :openai_api_key)
 ```
 
 2. **Rate limits and quotas** in OpenAI dashboard
@@ -144,7 +144,7 @@ Application.get_env(:goose, :openai_api_key)
 3. **Request format**:
 ```elixir
 # Test minimal request
-Goose.Clients.OpenAIClient.responses(
+HelloDocumentsSpeaking.Clients.OpenAIClient.responses(
   "You are helpful", 
   [%{role: "user", content: "Hello"}]
 )
@@ -169,15 +169,15 @@ mutool --version
 2. **Test PDF extraction**:
 ```elixir
 # In iex -S mix
-document = Goose.Repo.get(Goose.Models.Document, 1)
-Goose.Services.PDFExtractor.extract_text_from_binary(file_content)
+document = HelloDocumentsSpeaking.Repo.get(HelloDocumentsSpeaking.Models.Document, 1)
+HelloDocumentsSpeaking.Services.PDFExtractor.extract_text_from_binary(file_content)
 ```
 
 3. **Check S3 access**:
 ```elixir
 # Test S3 file reading
-document = Goose.Repo.get(Goose.Models.Document, 1) 
-Goose.Models.Document.read_file(document)
+document = HelloDocumentsSpeaking.Repo.get(HelloDocumentsSpeaking.Models.Document, 1) 
+HelloDocumentsSpeaking.Models.Document.read_file(document)
 ```
 
 ### S3 Issues
@@ -244,7 +244,7 @@ Monitor processes and memory:
 Process.list()
 
 # Check specific process
-pid = Process.whereis(Goose.Repo)
+pid = Process.whereis(HelloDocumentsSpeaking.Repo)
 Process.info(pid)
 
 # Monitor memory usage

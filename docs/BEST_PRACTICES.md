@@ -1,18 +1,18 @@
 # Best Practices
 
-This document outlines development best practices for the Goose service.
+This document outlines development best practices for the Hello Documents Speaking service.
 
 ## Adding New WebSocket Handlers
 
-Goose is designed to support multiple WebSocket-based features. Follow this pattern to add new handlers:
+Hello Documents Speaking is designed to support multiple WebSocket-based features. Follow this pattern to add new handlers:
 
 ### 1. Create the Handler File
 
 Create your handler in the `web/sockets/` directory:
 
 ```elixir
-# lib/goose/web/sockets/task_chat_socket.ex
-defmodule Goose.Web.Sockets.TaskChatSocket do
+# lib/hello-documents-speaking/web/sockets/task_chat_socket.ex
+defmodule HelloDocumentsSpeaking.Web.Sockets.TaskChatSocket do
   @moduledoc """
   WebSocket handler for task-related chat functionality.
   
@@ -23,10 +23,10 @@ defmodule Goose.Web.Sockets.TaskChatSocket do
   import Ecto.Query
   require Logger
   
-  alias Goose.Repo
-  alias Goose.Models.{Task, User}
-  alias Goose.Web.Utils.JsonUtils
-  alias Goose.Services.TaskAI
+  alias HelloDocumentsSpeaking.Repo
+  alias HelloDocumentsSpeaking.Models.{Task, User}
+  alias HelloDocumentsSpeaking.Web.Utils.JsonUtils
+  alias HelloDocumentsSpeaking.Services.TaskAI
   
   def init(opts) do
     user = Map.get(opts, :user)
@@ -71,8 +71,8 @@ end
 Add the WebSocket route to the authenticated router:
 
 ```elixir
-# lib/goose/web/authenticated_router.ex
-defmodule Goose.Web.AuthenticatedRouter do
+# lib/hello-documents-speaking/web/authenticated_router.ex
+defmodule HelloDocumentsSpeaking.Web.AuthenticatedRouter do
   # ... existing code ...
   
   # Task Chat WebSocket - AI-powered task management
@@ -80,7 +80,7 @@ defmodule Goose.Web.AuthenticatedRouter do
     current_user = conn.assigns.current_user
     
     conn
-    |> WebSockAdapter.upgrade(Goose.Web.Sockets.TaskChatSocket, %{user: current_user}, timeout: 60_000)
+    |> WebSockAdapter.upgrade(HelloDocumentsSpeaking.Web.Sockets.TaskChatSocket, %{user: current_user}, timeout: 60_000)
     |> halt()
   end
   
@@ -149,18 +149,18 @@ end
 
 ### Module Placement
 
-- **External API Clients** → `lib/goose/clients/`
-- **Data Models** → `lib/goose/models/`
-- **Business Logic & Services** → `lib/goose/services/`
-- **Web Layer** → `lib/goose/web/` (auth, routers, sockets, utils)
-- **WebSocket Handlers** → `lib/goose/web/sockets/`
+- **External API Clients** → `lib/hello-documents-speaking/clients/`
+- **Data Models** → `lib/hello-documents-speaking/models/`
+- **Business Logic & Services** → `lib/hello-documents-speaking/services/`
+- **Web Layer** → `lib/hello-documents-speaking/web/` (auth, routers, sockets, utils)
+- **WebSocket Handlers** → `lib/hello-documents-speaking/web/sockets/`
 
 ### Naming Conventions
 
-- **WebSocket modules**: `Goose.Web.Sockets.FeatureChatSocket`
-- **Service modules**: `Goose.Services.FeatureService` 
-- **Client modules**: `Goose.Clients.ExternalServiceClient`
-- **Model modules**: `Goose.Models.ModelName`
+- **WebSocket modules**: `HelloDocumentsSpeaking.Web.Sockets.FeatureChatSocket`
+- **Service modules**: `HelloDocumentsSpeaking.Services.FeatureService` 
+- **Client modules**: `HelloDocumentsSpeaking.Clients.ExternalServiceClient`
+- **Model modules**: `HelloDocumentsSpeaking.Models.ModelName`
 
 ### JSON API Consistency
 
@@ -199,7 +199,7 @@ Create integration tests for your WebSocket handlers:
 
 ```elixir
 # test/websockets/task_chat_websocket_test.exs
-defmodule Goose.WebSockets.TaskChatWebSocketTest do
+defmodule HelloDocumentsSpeaking.WebSockets.TaskChatWebSocketTest do
   use ExUnit.Case
   
   # Test WebSocket connections and message handling
